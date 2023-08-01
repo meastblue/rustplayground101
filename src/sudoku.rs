@@ -7,33 +7,26 @@ enum Level {
 }
 
 pub struct Sudoku {
-    grid: [[u8; 9]; 9],
+    grid: [[i32; 9]; 9],
 }
 
 impl Sudoku {
     pub fn new() {
-        let mut grid = [[0; 9]; 9];
-        Self::generate_grid(&mut grid);
+        Self {
+            grid: Self::generate_grid(),
+        };
     }
 
-    fn generate_grid(grid: &mut [[u8; 9]; 9]) {
+    fn generate_grid() -> [[i32; 9]; 9] {
+        let mut grid = [[0; 9]; 9];
         let mut rng = rand::thread_rng();
 
         for row in grid.iter_mut() {
             for col in row.iter_mut() {
-                loop {
-                    let rand = rng.gen_range(1..10);
-
-                    if row.contains(&rand) {
-                        *col = rand;
-                        break;
-                    }
-                }
+                *col = rng.gen_range(1..10);
             }
         }
 
-        for g in grid.iter() {
-            println!("{:?}", g);
-        }
+        grid
     }
 }
