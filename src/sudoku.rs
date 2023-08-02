@@ -27,6 +27,17 @@ impl Sudoku {
             }
         }
 
+        Self::clean_grid(&mut grid);
         grid
+    }
+
+    fn clean_grid(grid: &mut [[i32; 9]; 9]) {
+        for row in grid.iter_mut() {
+            for cell in row.iter_mut() {
+                if row.contains(cell) {
+                    
+                }
+            }
+        }
     }
 }
