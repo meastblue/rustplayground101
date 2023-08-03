@@ -1,7 +1,10 @@
 mod sudoku;
 
-use sudoku::Sudoku;
-
+use sudoku::*;
 fn main() {
-    Sudoku::new();
+    let sudoku = generator::Grid::new();
+
+    for r in sudoku.grid.iter() {
+        println!("{:?}", r);
+    }
 }
