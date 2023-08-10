@@ -26,7 +26,7 @@ impl Grid {
     fn clean_grid(&mut self) {
         self.clear_rows();
         self.clear_columns();
-        self.clean_square();
+        self.clean_box();
     }
 
     fn clear_rows(&mut self) {
@@ -61,14 +61,14 @@ impl Grid {
         })
     }
 
-    fn clean_square(&mut self) {
+    fn clean_box(&mut self) {
         self.grid
             .clone()
-            .iter_mut()
+            .iter()
             .step_by(3)
             .enumerate()
             .for_each(|(ir, row)| {
-                row.iter_mut().enumerate().step_by(3).for_each(|(ic, _)| {
+                row.iter().enumerate().step_by(3).for_each(|(ic, _)| {
                     let mut seen = [false; 10];
 
                     (0..3).for_each(|i| {

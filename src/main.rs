@@ -8,5 +8,11 @@ fn main() {
         println!("{:?}", r);
     }
 
-    solver::Solver::new(sudoku);
+    println!("___________________");
+
+    let solver = solver::Solver::new(sudoku);
+
+    for s in solver.grid.iter() {
+        println!("{:?}", s);
+    }
 }
