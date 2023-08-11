@@ -16,7 +16,7 @@ impl Grid {
     fn generate_grid(&mut self) {
         self.grid.iter_mut().for_each(|row| {
             row.iter_mut().for_each(|col| {
-                *col = rand::thread_rng().gen_range(1..10);
+                *col = rand::thread_rng().gen_range(1..=9);
             })
         });
 
