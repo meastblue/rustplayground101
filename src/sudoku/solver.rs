@@ -12,66 +12,59 @@ impl Solver {
     }
 
     fn solve(&mut self) -> bool {
-        let mut solved = false;
+        if let Some((row, col)) = self.find_empty_cell() {
+            for key in 1..=9 {
+                if self.is_valid_placement(row, col, key) {
+                    self.grid[row][col] = key;
 
-        self.grid.clone().iter().enumerate().for_each(|(ir, row)| {
-            row.iter().enumerate().for_each(|(ic, col)| {
-                if *col != 0 || solved {
-                    return;
-                }
-
-                (1..=9).for_each(|key| {
-                    if self.is_valid_placement(&ir, &ic, &key) {
-                        self.grid[ir][ic] = key;
-
-                        if !self.solve() {
-                            self.grid[ir][ic] = 0;
-                        }
-
-                        solved = true;
-                        return;
+                    if self.solve() {
+                        return true; // Puzzle solved
                     }
-                });
-                solved = false;
-                return;
-            })
-        });
-        solved = true;
 
-        solved
-    }
-
-    fn check_row_validity(&self, row: &usize, key: &i32) -> bool {
-        self.grid[*row].contains(key)
-    }
-
-    fn check_column_validity(&self, col: &usize, key: &i32) -> bool {
-        let mut in_column = false;
-
-        (0..9).for_each(|row| {
-            if self.grid[row][*col] == *key {
-                in_column = true
+                    self.grid[row][col] = 0;
+                }
             }
-        });
 
-        in_column
+            false
+        } else {
+            true
+        }
     }
 
-    fn check_box_validity(&self, row: &usize, col: &usize, key: &i32) -> bool {
-        let local_box_row = row - row % 3;
-        let local_box_col = col - col % 3;
-        let mut is_in_box = false;
+    fn find_empty_cell(&self) -> Option<(usize, usize)> {
+        for (row, row_data) in self.grid.iter().enumerate() {
+            if let Some(col) = row_data.iter().position(|&value| value == 0) {
+                return Some((row, col));
+            }
+        }
 
-        (local_box_row..local_box_row + 3).for_each(|i| {
-            (local_box_col..local_box_col + 3).for_each(|j| is_in_box = self.grid[i][j] == *key)
-        });
-
-        is_in_box
+        None
     }
-    fn is_valid_placement(&self, ir: &usize, ic: &usize, key: &i32) -> bool {
-        !self.check_row_validity(ir, key)
-            && !self.check_column_validity(ic, key)
-            && !self.check_box_validity(ir, ic, key)
-            && self.grid[*ir][*ic] != *key
+
+    fn check_row_validity(&self, row: usize, key: i32) -> bool {
+        self.grid[row].contains(&key)
+    }
+
+    fn check_column_validity(&self, col: usize, key: i32) -> bool {
+        self.grid.iter().any(|row| row[col] == key)
+    }
+
+    fn check_box_validity(&self, start_row: usize, start_col: usize, key: i32) -> bool {
+        let end_row = start_row + 3;
+        let end_col = start_col + 3;
+
+        for row in &self.grid[start_row..end_row] {
+            if row[start_col..end_col].contains(&key) {
+                return true;
+            }
+        }
+
+        false
+    }
+
+    fn is_valid_placement(&self, row: usize, col: usize, key: i32) -> bool {
+        !self.check_row_validity(row, key)
+            && !self.check_column_validity(col, key)
+            && !self.check_box_validity(row - row % 3, col - col % 3, key)
     }
 }

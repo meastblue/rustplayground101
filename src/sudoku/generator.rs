@@ -1,61 +1,73 @@
 use rand::Rng;
 
+const GRID_SIZE: usize = 9;
+const BOX_SIZE: usize = 3;
+const EMPTY_CELL: i32 = 0;
+const NUM_TO_FILL: usize = 20;
+
 pub struct Grid {
     pub grid: Vec<Vec<i32>>,
-    srn: usize,
 }
 
 impl Grid {
     pub fn new() -> Self {
-        Grid {
-            grid: vec![vec![0; 9]; 9],
-            srn: (9 as f64).sqrt() as usize,
-        }
+        let mut grid = Grid {
+            grid: vec![vec![EMPTY_CELL; GRID_SIZE]; GRID_SIZE],
+        };
+
+        grid.fill_values();
+
+        grid
     }
 
     pub fn fill_values(&mut self) {
         self.fill_diagonal();
-        self.fill_remaining(0, self.srn);
+        self.fill_remaining(0, 0);
         self.remove_digits();
     }
 
     fn fill_diagonal(&mut self) {
-        for i in (0..9).step_by(self.srn) {
+        for i in (0..GRID_SIZE).step_by(BOX_SIZE) {
             self.fill_box(i, i);
         }
     }
 
-    fn fill_box(&mut self, row: usize, col: usize) {
-        for i in 0..self.srn {
-            for j in 0..self.srn {
-                let mut num;
-                loop {
-                    num = self.random_generator(9);
-                    if self.unused_in_box(row, col, num) {
-                        break;
-                    }
-                }
-                self.grid[row + i][col + j] = num;
+    fn fill_box(&mut self, start_row: usize, start_col: usize) {
+        for i in 0..BOX_SIZE {
+            for j in 0..BOX_SIZE {
+                let num = self.generate_unique_random(start_row, start_col);
+                self.grid[start_row + i][start_col + j] = num;
             }
         }
     }
 
-    fn random_generator(&self, num: i32) -> i32 {
-        rand::thread_rng().gen_range(1..=num)
+    fn generate_unique_random(&self, row: usize, col: usize) -> i32 {
+        let mut num;
+        let mut rng = rand::thread_rng();
+        loop {
+            num = rng.gen_range(1..=GRID_SIZE as i32);
+            if self.is_unused_in_row(row, num)
+                && self.is_unused_in_col(col, num)
+                && self.is_unused_in_box(row, col, num)
+            {
+                break;
+            }
+        }
+        num
     }
 
-    fn unused_in_row(&self, i: usize, num: i32) -> bool {
-        !self.grid[i].contains(&num)
+    fn is_unused_in_row(&self, row: usize, num: i32) -> bool {
+        !self.grid[row].contains(&num)
     }
 
-    fn unused_in_col(&self, j: usize, num: i32) -> bool {
-        !self.grid.iter().any(|row| row[j] == num)
+    fn is_unused_in_col(&self, col: usize, num: i32) -> bool {
+        !self.grid.iter().any(|row| row[col] == num)
     }
 
-    fn unused_in_box(&self, row: usize, col: usize, num: i32) -> bool {
-        for i in 0..self.srn {
-            for j in 0..self.srn {
-                if self.grid[row + i][col + j] == num {
+    fn is_unused_in_box(&self, start_row: usize, start_col: usize, num: i32) -> bool {
+        for i in 0..BOX_SIZE {
+            for j in 0..BOX_SIZE {
+                if self.grid[start_row + i][start_col + j] == num {
                     return false;
                 }
             }
@@ -63,69 +75,52 @@ impl Grid {
         true
     }
 
-    fn fill_remaining(&mut self, i: usize, j: usize) -> bool {
-        if j >= 9 && i < 8 {
-            return self.fill_remaining(i + 1, 0);
-        }
-
-        if i >= 9 && j >= 9 {
+    fn fill_remaining(&mut self, row: usize, col: usize) -> bool {
+        if row == GRID_SIZE {
             return true;
         }
 
-        let mut next_i = i;
-        let mut next_j = j;
+        let mut next_row = row;
+        let mut next_col = col + 1;
 
-        if i < self.srn {
-            if j < self.srn {
-                next_i = i;
-                next_j = j;
-            }
-        } else if i < 9 - self.srn {
-            if j == (i / self.srn) * self.srn {
-                next_i = i;
-                next_j = j + self.srn;
-            }
-        } else {
-            if j == 9 - self.srn {
-                next_i = i + 1;
-                next_j = 0;
-                if next_i >= 9 {
-                    return true;
-                }
-            }
+        if next_col >= GRID_SIZE {
+            next_row += 1;
+            next_col = 0;
         }
 
-        for num in 1..=9 as i32 {
-            if self.check_if_safe(i, j, num) {
-                self.grid[i][j] = num;
-                if self.fill_remaining(next_i, next_j) {
+        if self.grid[row][col] != EMPTY_CELL {
+            return self.fill_remaining(next_row, next_col);
+        }
+
+        for num in 1..=GRID_SIZE as i32 {
+            if self.check_if_safe(row, col, num) {
+                self.grid[row][col] = num;
+                if self.fill_remaining(next_row, next_col) {
                     return true;
                 }
+                self.grid[row][col] = EMPTY_CELL;
             }
         }
 
         false
     }
 
-    fn check_if_safe(&self, i: usize, j: usize, num: i32) -> bool {
-        self.unused_in_row(i, num)
-            && self.unused_in_col(j, num)
-            && self.unused_in_box(i - i % self.srn, j - j % self.srn, num)
+    fn check_if_safe(&self, row: usize, col: usize, num: i32) -> bool {
+        self.is_unused_in_row(row, num)
+            && self.is_unused_in_col(col, num)
+            && self.is_unused_in_box(row - row % BOX_SIZE, col - col % BOX_SIZE, num)
     }
 
     fn remove_digits(&mut self) {
-        let mut count = 20;
-        while count != 0 {
-            let cell_id = self.random_generator(9 * 9) as usize;
-            let i = cell_id / 9;
-            let mut j = cell_id % 9;
+        let mut rng = rand::thread_rng();
+        let mut count = NUM_TO_FILL;
+        while count > 0 {
+            let cell_id = rng.gen_range(0..GRID_SIZE * GRID_SIZE);
+            let i = cell_id / GRID_SIZE;
+            let j = cell_id % GRID_SIZE;
 
-            if j != 0 {
-                j -= 1;
-            }
-
-            if self.grid[i][j] != 0 {
-                self.grid[i][j] = 0;
+            if self.grid[i][j] != EMPTY_CELL {
+                self.grid[i][j] = EMPTY_CELL;
                 count -= 1;
             }
         }
