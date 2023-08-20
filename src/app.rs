@@ -21,9 +21,7 @@ impl App {
             true => {
                 println!("Generating a new sudoku grid...");
                 println!("This is your new sudoku grid:");
-                grd.grid.iter().for_each(|row| {
-                    println!("{:?}", row);
-                });
+                grd.print_grid();
             }
             false => {
                 println!("You have chosen to exit the program.");

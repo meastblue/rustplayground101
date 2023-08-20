@@ -1,6 +1,6 @@
 use super::generator::Grid;
 pub struct Solver {
-    pub grid: [[i32; 9]; 9],
+    pub grid: Vec<Vec<i32>>,
 }
 
 impl Solver {
