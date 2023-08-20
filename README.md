@@ -35,12 +35,6 @@ RustBook is your ideal learning companion if you're passionate about programming
 
 6. **Explore Solutions:** If you encounter difficulties, feel free to check the solutions provided in the repository. Compare your approach to learn more.
 
-## Contributing
-
-We encourage community contributions to make this repository even more useful. If you have ideas for new exercises, documentation improvements, or fixes, please submit a pull request.
-
-Start today and dive into learning the Rust language with RustBook. Happy coding!
-
 ## License
 
 This repository is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
