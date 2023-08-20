@@ -1,6 +1,6 @@
 # RustBook - Learning the Rust Language through Exercises
 
-![RustBook Banner](link_to_banner_image)
+![RustBook Banner](https://s3.fission.codes/2022/10/rust_poster.png)
 
 Welcome to the "RustBook" GitHub repository! This repository has been created with the aim of providing you with a comprehensive resource to learn the Rust programming language in an interactive and practical way. Our pedagogical approach focuses on hands-on learning by guiding you through a series of progressive exercises designed to strengthen your understanding of the Rust language.
 
