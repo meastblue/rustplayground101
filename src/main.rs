@@ -1,3 +1,7 @@
+mod hangman;
+
+use hangman::display::Display;
+
 fn main() {
-    println!("Hello, world!");
+    Display::draw_welcome();
 }
