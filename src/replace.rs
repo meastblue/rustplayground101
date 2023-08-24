@@ -27,7 +27,7 @@ impl Replace {
 
         for line in reader.lines() {
             let l = line?;
-            let buf = self.process_line(l)?;
+            let buf = self.process_line(l);
 
             dist.write_all(buf.as_bytes())?;
         }
@@ -35,17 +35,11 @@ impl Replace {
         Ok(())
     }
 
-    fn process_line(&self, line: String) -> Result<String> {
+    fn process_line(&self, line: String) -> String {
         let target = format!("{} ", &self.target);
         let word = format!("{} ", &self.word);
 
-        if !line.contains(&target) {
-            return Ok(line.clone());
-        }
-
-        let l = line.replace(&target, &word);
-        let l = l.replace(&target.to_lowercase(), &word.to_lowercase());
-
-        Ok(l)
+        line.replace(&target, &word)
+            .replace(&target.to_lowercase(), &word.to_lowercase())
     }
 }
