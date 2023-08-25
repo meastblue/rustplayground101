@@ -1,7 +1,7 @@
+mod app;
+mod dictionary;
 mod hangman;
 
-use hangman::display::Display;
-
 fn main() {
-    Display::draw_welcome();
+    app::App::new();
 }
