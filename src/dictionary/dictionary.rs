@@ -2,6 +2,7 @@ use rand::Rng;
 use std::fs;
 use std::io::{self, BufRead, Error};
 
+#[derive(Debug)]
 pub struct Dictionary {
     word: String,
 }
@@ -21,5 +22,9 @@ impl Dictionary {
         let content = reader.lines().collect::<Result<Vec<String>, Error>>()?;
 
         Ok(content)
+    }
+
+    pub fn get_word(&self) -> &str {
+        &self.word
     }
 }

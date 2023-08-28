@@ -15,6 +15,7 @@ impl Display {
 			|/     \||/     \||/    )_)(_______)|/     \||/     \||/    )_)
 		"
         );
+        println!("Welcome to hangman game");
     }
 
     pub fn draw(turn: &usize) {
@@ -23,7 +24,7 @@ impl Display {
     }
 
     fn draw_turn(&self, turn: &usize) -> &str {
-        let mut draw = match turn {
+        let draw = match turn {
             0 => {
                 r" 
 			____
