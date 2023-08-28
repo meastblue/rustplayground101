@@ -1,3 +1,3 @@
 pub mod display;
 pub mod guess;
-pub mod hangman;
+pub mod game;

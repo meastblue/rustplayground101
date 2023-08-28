@@ -1,4 +1,4 @@
-pub struct Hangman {
+pub struct Game {
     state: String,
     letters: Vec<String>,
     found_letters: Vec<String>,
@@ -6,8 +6,6 @@ pub struct Hangman {
     turns_left: usize,
 }
 
-impl Hangman {
-    pub fn new() {
-        
-    }
+impl Game {
+    pub fn new() {}
 }
