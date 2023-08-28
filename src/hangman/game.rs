@@ -1,12 +1,12 @@
 #[derive(PartialEq, Clone)]
-pub enum GameState {
+enum GameState {
     Pending,
     Loose,
     Win,
 }
 
 #[derive(Clone)]
-pub struct Game {
+struct Game {
     state: GameState,
     letters: Vec<char>,
     found_letters: Vec<char>,
@@ -49,7 +49,7 @@ impl Game {
                     return c;
                 }
 
-                if self.found_letters.contains(&c) {
+                if self.found_letters.contains(&c) { 
                     return c;
                 }
 
