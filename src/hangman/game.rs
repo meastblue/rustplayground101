@@ -49,7 +49,7 @@ impl Game {
                     return c;
                 }
 
-                if self.found_letters.contains(&c) { 
+                if self.found_letters.contains(&c) {
                     return c;
                 }
 
