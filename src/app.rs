@@ -13,18 +13,15 @@ impl App {
     fn run() -> Result<(), Error> {
         let dictionary = dictionary::dictionary::Dictionary::new()?;
         let word = dictionary.get_word();
-        let mut game = game::Game::new(word);
+        let game = game::Game::new(word);
         hangman::display::Display::draw_welcome();
 
         loop {
-            if game.get_state() != game::GameState::Pending {
+            if game.is_over() {
                 break;
             }
 
-            if game.get_turns_left() == 0 {
-                game.set_state(game::GameState::Loose);
-                break;
-            }
+            game.play(word);
         }
 
         Ok(())

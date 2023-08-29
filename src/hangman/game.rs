@@ -1,3 +1,7 @@
+use std::f32::consts::E;
+
+use super::guess::Guess;
+
 #[derive(PartialEq, Clone)]
 enum GameState {
     Pending,
@@ -6,7 +10,7 @@ enum GameState {
 }
 
 #[derive(Clone)]
-struct Game {
+pub struct Game {
     state: GameState,
     letters: Vec<char>,
     found_letters: Vec<char>,
@@ -40,6 +44,18 @@ impl Game {
         game
     }
 
+    pub fn play(&self, word: &str) {
+        println!("Here the word:");
+        self.display_word(word);
+        println!("You have {} turns left", self.turns_left);
+        println!("Make a guess");
+
+        match Guess::read_guess() {
+            Ok(guess) => println!("{}", guess),
+            Err(err) => println!("{:?}", err),
+        };
+    }
+
     fn display_word(&self, word: &str) {
         let w = word
             .chars()
@@ -62,15 +78,36 @@ impl Game {
         }
     }
 
-    pub fn get_state(&self) -> GameState {
-        self.state.clone()
+    fn is_good(&mut self, guess: &char) {
+        if !self.letters.contains(&guess) {
+            self.is_wrong();
+        }
+
+    }
+
+    fn is_wrong(&mut self) {
+        if self.turns_left == 0 {
+            self.is_over();
+        }
+
+        --self.turns_left;
+    }
+
+    pub fn is_over(&self) -> bool {
+        let mut is_over = false;
+
+        if self.state != GameState::Pending {
+            is_over = true;
+        }
+
+        if self.turns_left == 0 {
+            is_over = true;
+        }
+
+        is_over
     }
 
     pub fn get_turns_left(&self) -> i32 {
         self.turns_left
-    }
-
-    pub fn set_state(&mut self, state: GameState) {
-        self.state = state;
     }
 }

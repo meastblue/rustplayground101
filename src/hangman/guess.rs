@@ -14,8 +14,6 @@ impl Guess {
         loop {
             let mut g = String::new();
 
-            println!("What is your letter?");
-
             match io::stdin().read_line(&mut g) {
                 Ok(_) => {
                     match Self::check_guess(&g) {

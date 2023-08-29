@@ -15,7 +15,24 @@ impl Display {
 			|/     \||/     \||/    )_)(_______)|/     \||/     \||/    )_)
 		"
         );
-        println!("Welcome to hangman game");
+
+        Self::draw_rules();
+    }
+
+    fn draw_rules() {
+        println!(
+            "Welcome to Hangman Game!\n\
+			------------------------\n\
+			Hangman is a word guessing game.\n\
+			Here are the rules:\n\
+			1. A secret word is chosen by the computer.\n\
+			2. You need to guess the letters in the word.\n\
+			3. You have a total of 8 incorrect guesses before the hangman is complete.\n\
+			4. Each incorrect guess adds a part to the hangman drawing.\n\
+			5. If you correctly guess all the letters in the word before using all 8 guesses, you win!\n\
+			6. If the hangman is fully drawn before you guess the word, you lose.\n\
+			Have fun and good luck!\n"
+        );
     }
 
     pub fn draw(turn: &usize) {
