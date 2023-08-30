@@ -1,20 +1,17 @@
-use std::f32::consts::E;
-
+use super::display::Display;
 use super::guess::Guess;
 
 #[derive(PartialEq, Clone)]
-enum GameState {
+pub enum GameState {
     Pending,
     Loose,
     Win,
 }
 
-#[derive(Clone)]
 pub struct Game {
     state: GameState,
     letters: Vec<char>,
     found_letters: Vec<char>,
-    used_letters: Vec<char>,
     turns_left: i32,
 }
 
@@ -26,34 +23,43 @@ impl Game {
             .enumerate()
             .filter_map(|(i, c)| {
                 if i != 0 && i != word.len() - 1 {
-                    return Some(c);
+                    Some(c)
+                } else {
+                    None
                 }
-
-                None
             })
             .collect::<Vec<char>>();
 
-        let game = Game {
+        Game {
             state: GameState::Pending,
             letters,
             found_letters: vec![],
-            used_letters: vec![],
             turns_left,
-        };
-
-        game
+        }
     }
 
-    pub fn play(&self, word: &str) {
+    pub fn play(&mut self, word: &str) -> Option<GameState> {
         println!("Here the word:");
         self.display_word(word);
         println!("You have {} turns left", self.turns_left);
         println!("Make a guess");
 
         match Guess::read_guess() {
-            Ok(guess) => println!("{}", guess),
+            Ok(guess) => {
+                if !self.is_good(&guess) {
+                    Display::draw(&self.turns_left);
+                }
+
+                self.found_letters.push(guess);
+
+                if self.is_won() {
+                    return Some(GameState::Win);
+                }
+            }
             Err(err) => println!("{:?}", err),
-        };
+        }
+
+        None
     }
 
     fn display_word(&self, word: &str) {
@@ -61,53 +67,47 @@ impl Game {
             .chars()
             .enumerate()
             .map(|(i, c)| {
-                if i == 0 || i == word.len() - 1 {
-                    return c;
+                if i == 0 || i == word.len() - 1 || self.found_letters.contains(&c) {
+                    c
+                } else {
+                    '_'
                 }
-
-                if self.found_letters.contains(&c) {
-                    return c;
-                }
-
-                return '_';
             })
             .collect::<Vec<char>>();
 
-        for c in w {
-            print!("{} ", c);
-        }
+        w.iter().for_each(|c| print!("{} ", c));
+        println!();
     }
 
-    fn is_good(&mut self, guess: &char) {
+    fn is_good(&mut self, guess: &char) -> bool {
         if !self.letters.contains(&guess) {
             self.is_wrong();
+            false
+        } else {
+            true
         }
-
     }
 
     fn is_wrong(&mut self) {
         if self.turns_left == 0 {
             self.is_over();
+        } else {
+            self.turns_left -= 1;
         }
-
-        --self.turns_left;
     }
 
-    pub fn is_over(&self) -> bool {
-        let mut is_over = false;
-
-        if self.state != GameState::Pending {
-            is_over = true;
+    pub fn is_over(&mut self) -> bool {
+        if self.state != GameState::Pending || self.turns_left == 0 {
+            self.state = GameState::Loose;
+            true
+        } else {
+            false
         }
-
-        if self.turns_left == 0 {
-            is_over = true;
-        }
-
-        is_over
     }
 
-    pub fn get_turns_left(&self) -> i32 {
-        self.turns_left
+    fn is_won(&self) -> bool {
+        self.letters
+            .iter()
+            .all(|letter| self.found_letters.contains(letter))
     }
 }

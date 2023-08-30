@@ -1,8 +1,7 @@
-use std::io::Error;
-
-use crate::dictionary;
-use crate::hangman;
+use crate::dictionary::dictionary::Dictionary;
+use crate::hangman::display::Display;
 use crate::hangman::game;
+
 pub struct App;
 
 impl App {
@@ -10,20 +9,29 @@ impl App {
         Self::run();
     }
 
-    fn run() -> Result<(), Error> {
-        let dictionary = dictionary::dictionary::Dictionary::new()?;
-        let word = dictionary.get_word();
-        let game = game::Game::new(word);
-        hangman::display::Display::draw_welcome();
-
-        loop {
-            if game.is_over() {
-                break;
+    pub fn run() {
+        let dictionary = match Dictionary::new() {
+            Ok(d) => d,
+            Err(err) => {
+                println!("{}", err);
+                return;
             }
+        };
+        let word = dictionary.get_word();
+        let mut game = game::Game::new(&word);
 
-            game.play(word);
+        Display::draw_welcome();
+
+        while !game.is_over() {
+            match game.play(&word) {
+                Some(_) => {
+                    Display::display_win();
+                    return;
+                }
+                None => continue,
+            }
         }
 
-        Ok(())
+        Display::display_loose(&word);
     }
 }
