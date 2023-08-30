@@ -1,0 +1,139 @@
+[
+  {
+    "Nom": "Alice",
+    "Prénom": "Dupont",
+    "Age": 28,
+    "Adresse": "123 Rue de la Liberté",
+    "Ville": "Paris",
+    "Téléphone": "123-456-7890",
+    "Situation familiale": ["Célibataire"],
+    "Famille": {
+      "Parents": [
+        {
+          "Nom": "Marie",
+          "Prénom": "Dupont",
+          "Age": 55
+        },
+        {
+          "Nom": "Jean",
+          "Prénom": "Dupont",
+          "Age": 58
+        }
+      ],
+      "Frères et sœurs": [
+        {
+          "Nom": "Sophie",
+          "Prénom": "Dupont",
+          "Age": 24
+        }
+      ]
+    }
+  },
+  {
+    "Nom": "Bob",
+    "Prénom": "Smith",
+    "Age": 35,
+    "Adresse": "456 Elm Street",
+    "Ville": "New York",
+    "Téléphone": "987-654-3210",
+    "Situation familiale": ["Marié", "Père"],
+    "Famille": {
+      "Conjoint": {
+        "Nom": "Emily",
+        "Prénom": "Smith",
+        "Age": 32
+      },
+      "Enfants": [
+        {
+          "Nom": "Emma",
+          "Prénom": "Smith",
+          "Age": 6
+        },
+        {
+          "Nom": "Noah",
+          "Prénom": "Smith",
+          "Age": 4
+        }
+      ]
+    }
+  },
+  {
+    "Nom": "Élise",
+    "Prénom": "Martin",
+    "Age": 22,
+    "Adresse": "789 Avenue des Roses",
+    "Ville": "Lyon",
+    "Téléphone": "555-123-4567",
+    "Situation familiale": ["Célibataire"],
+    "Famille": {}
+  },
+  {
+    "Nom": "John",
+    "Prénom": "Johnson",
+    "Age": 40,
+    "Adresse": "789 Oak Avenue",
+    "Ville": "Los Angeles",
+    "Téléphone": "222-333-4444",
+    "Situation familiale": ["Divorcé", "Père"],
+    "Famille": {
+      "Enfants": [
+        {
+          "Nom": "Sophia",
+          "Prénom": "Johnson",
+          "Age": 10
+        }
+      ]
+    }
+  },
+  {
+    "Nom": "Sophie",
+    "Prénom": "Tremblay",
+    "Age": 30,
+    "Adresse": "567 Rue Principale",
+    "Ville": "Montréal",
+    "Téléphone": "111-222-3333",
+    "Situation familiale": ["Mariée", "Mère"],
+    "Famille": {
+      "Conjoint": {
+        "Nom": "Marc",
+        "Prénom": "Tremblay",
+        "Age": 32
+      },
+      "Enfants": [
+        {
+          "Nom": "Léa",
+          "Prénom": "Tremblay",
+          "Age": 5
+        },
+        {
+          "Nom": "Gabriel",
+          "Prénom": "Tremblay",
+          "Age": 3
+        }
+      ]
+    }
+  },
+  {
+    "Nom": "David",
+    "Prénom": "Williams",
+    "Age": 28,
+    "Adresse": "789 Oak Street",
+    "Ville": "Toronto",
+    "Téléphone": "555-987-6543",
+    "Situation familiale": ["Célibataire"],
+    "Famille": {
+      "Parents": [
+        {
+          "Nom": "Catherine",
+          "Prénom": "Williams",
+          "Age": 60
+        },
+        {
+          "Nom": "Michael",
+          "Prénom": "Williams",
+          "Age": 62
+        }
+      ]
+    }
+  }
+]
